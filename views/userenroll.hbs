@@ -1,0 +1,79 @@
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <title>Hacking Form</title>
+
+    <style>
+      body { background-color: #000; color: #00ff00; } .form-container {
+      margin-top: 50px; } .card { background-color: #222; border: 1px solid
+      #00ff00; } .card-header { background-color: #111; border-bottom: 1px solid
+      #00ff00; } .form-group label { color: #00ff00; } .btn-hack {
+      background-color: #00ff00; color: #000; } .btn-hack:hover {
+      background-color: #006400; color: #fff; }
+    </style>
+  </head>
+
+  <body>
+
+    <div class="container">
+      <div class="row justify-content-center form-container">
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header text-center">
+              <h2>Add Participant</h2>
+              <h4>Hacking Form</h4>
+            </div>
+            <div class="card-body">
+              <form action="/admin/user-enroll" method="post">
+
+                <div class="form-group">
+                  <label for="username">Username</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="username"
+                    placeholder="Enter participant name"
+                    name="participant_name"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="accessKey">Access Key</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="accessKey"
+                    placeholder="Enter participant's access key"
+                    name="accesskey"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  class="btn btn-hack btn-block"
+                >Submit</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+    ></script>
+
+  </body>
+
+</html>

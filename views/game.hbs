@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Hacking OTP Entry</title>
+
+    <style>
+        body {
+            background-color: #000;
+            color: #00ff00;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .otp-container {
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        .card {
+            background-color: #222;
+            border: 1px solid #00ff00;
+        }
+
+        .card-header {
+            background-color: #111;
+            border-bottom: 1px solid #00ff00;
+        }
+
+        .otp-input {
+            width: 40px;
+            text-align: center;
+            font-size: 20px;
+            margin: 0 5px;
+            background-color: #222;
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            outline: none;
+        }
+
+        .submit-btn {
+            margin-top: 20px;
+            background-color: #00ff00;
+            color: #000;
+        }
+
+        .submit-btn:hover {
+            background-color: #006400;
+            color: #fff;
+        }
+
+        #response-container {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #222;
+            border: 1px solid #00ff00;
+            max-height: 150px; /* Fixed height */
+            overflow-y: auto;
+        }
+
+        .array-container {
+            display: flex;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+            max-width: 400px;
+            margin: 20px auto;
+        }
+
+        .array-element {
+            width: 30px;
+            height: 30px;
+            background-color: #85a3b2;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 5px;
+            border-radius: 3px;
+        }
+
+        .hint-element {
+            /* Customize the width for the hint element */
+            min-width: 100px;
+        }
+
+        #timer-container,
+        #attempt-container {
+            margin-top: 10px;
+            color: #00ff00;
+        }
+
+        .disabled-btn {
+            background-color: #444;
+            color: #666;
+            cursor: not-allowed;
+        }
+    </style>
+    
+</head>
+
+<body>
+
+   <div class="container">
+    <div class="row justify-content-center otp-container">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h4>Hacking OTP Entry</h4>
+                </div>
+                <div class="card-body">
+                    <!-- Add a label to display the user ID -->
+                    <label for="userId">User ID:</label>
+                    <span id="userId">{{ userId }}</span>
+
+                    <form action="/verify-otp" method="post" id="otpForm">
+                        <div class="form-group">
+                            <input type="text" class="otp-input" maxlength="1" required>
+                            <input type="text" class="otp-input" maxlength="1" required>
+                            <input type="text" class="otp-input" maxlength="1" required>
+                            <input type="text" class="otp-input" maxlength="1" required>
+                            <input type="text" class="otp-input" maxlength="1" required>
+                            <input type="text" class="otp-input" maxlength="1" required>
+                        </div>
+                        <button type="submit" class="btn btn-hack submit-btn" id="submitBtn">Submit</button>
+                    </form>
+                    <div id="response-container"></div>
+                    <div id="timer-container"></div>
+                    <div id="attempt-container"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+{{!-- <script>
+    (function ($) {
+        $(document).ready(function () {
+            var timer = 240; // Initial timer value in seconds
+            var attempts = 24; // Initial attempts count
+
+            // Function to update the timer display
+            function updateTimerDisplay() {
+                $('#timer-container').text('Time remaining: ' + timer + ' seconds');
+            }
+
+            // Function to update the attempts display
+            function updateAttemptDisplay() {
+                $('#attempt-container').text('Attempts remaining: ' + attempts);
+            }
+
+            // Function to decrement the timer
+            function decrementTimer() {
+                timer--;
+                updateTimerDisplay();
+
+                // Disable the submit button when the timer reaches 0
+                if (timer === 0) {
+                    disableSubmitButton();
+                }
+            }
+
+            // Function to decrement the attempts
+            function decrementAttempts() {
+                attempts--;
+                updateAttemptDisplay();
+
+                // Disable the submit button when attempts reach 0
+                if (attempts === 0) {
+                    disableSubmitButton();
+                }
+            }
+
+            // Function to disable the submit button and stop the timer
+            function disableSubmitButton() {
+                $('#submitBtn').addClass('disabled-btn').prop('disabled', true);
+                clearInterval(timerInterval); // Stop the timer
+            }
+
+            // Update the timer and attempts display initially
+            updateTimerDisplay();
+            updateAttemptDisplay();
+
+            // Start decrementing the timer every second
+            var timerInterval = setInterval(decrementTimer, 1000);
+
+            // Submit the OTP form using AJAX
+            $('#otpForm').submit(function (e) {
+                e.preventDefault();
+
+                // Get the entered OTP
+                var otp = '';
+                $('.otp-input').each(function (index) {
+                    otp += $(this).val();
+                });
+
+                // Send the OTP, current timer value, and attempts count to the server using AJAX
+                $.ajax({
+                    type: 'POST',
+                    url: '/verify-otp',
+                    data: { otp: otp, timer: timer, attempts: attempts },
+                    success: function (response) {
+                        // Display the new response without replacing existing content
+                        var displayHtml = '<div class="array-container">';
+                        for (var i = 0; i < otp.length; i++) {
+                            displayHtml += '<div class="array-element">' + otp.charAt(i) + '</div>';
+                        }
+                        displayHtml += '<div class="array-element hint-element">' + response.hint + '</div>';
+                        displayHtml += '</div>';
+
+                        // Prepend the array-container to the response-container
+                        $('#response-container').prepend(displayHtml);
+
+                        // Decrement attempts after each submission
+                        decrementAttempts();
+
+                        // Check if the response contains a redirect URL
+                        if (response.redirectUrl) {
+                            // Redirect the user to the specified URL
+                            window.location.href = response.redirectUrl;
+
+                            // Disable the submit button
+                            $('#submitBtn').prop('disabled', true);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle AJAX error if needed
+                        console.error("AJAX Error:", status, error);
+                        $('#response-container').prepend('<p>Error occurred. Please try again.</p>');
+                    }
+                });
+            });
+        });
+    })(jQuery);
+</script> --}}
+    <script>
+  (function ($) {
+    $(document).ready(function () {
+      // Function to get stored value from localStorage or use default
+      function getStoredValue(key, defaultValue) {
+        var storedValue = localStorage.getItem(key);
+        return storedValue ? parseInt(storedValue) : defaultValue;
+      }
+
+      var userId = '{{ userId }}';
+      console.log(userId);
+
+      // Use a unique key for each user in local storage
+      var timer = getStoredValue(userId + '_timer', 240);
+      var attempts = getStoredValue(userId + '_attempts', 24);
+
+      // Function to update the timer display
+      function updateTimerDisplay() {
+        $('#timer-container').text('Time remaining: ' + timer + ' seconds');
+      }
+
+      // Function to update the attempts display
+      function updateAttemptDisplay() {
+        $('#attempt-container').text('Attempts remaining: ' + attempts);
+      }
+
+      // Function to decrement the timer
+      function decrementTimer() {
+        if (timer >= 0) {
+          timer--;
+          updateTimerDisplay();
+          localStorage.setItem(userId + '_timer', timer);
+
+          // Disable the submit button when the timer reaches 0
+          if (timer === 0) {
+            disableSubmitButton();
+            // Redirect to another route when timer reaches 0
+            window.location.href = '/fail-page';
+          }
+        }
+      }
+
+      // Function to decrement the attempts
+      function decrementAttempts() {
+        if(attempts>0){
+        attempts--;
+        updateAttemptDisplay();
+        localStorage.setItem(userId + '_attempts', attempts);
+
+        // Disable the submit button when attempts reach 0
+        if (attempts === 0) {
+          disableSubmitButton();
+          // Redirect to another route when attempts reach 0
+          window.location.href = '/fail-page';
+        }
+        }
+      }
+
+      // Function to disable the submit button and stop the timer
+      function disableSubmitButton() {
+        $('#submitBtn').addClass('disabled-btn').prop('disabled', true);
+        clearInterval(timerInterval); // Stop the timer
+      }
+
+      // Update the timer and attempts display initially
+      updateTimerDisplay();
+      updateAttemptDisplay();
+
+      // Start decrementing the timer every second
+      var timerInterval = setInterval(decrementTimer, 1000);
+
+      // Submit the OTP form using AJAX
+      $('#otpForm').submit(function (e) {
+        e.preventDefault();
+
+        // Get the entered OTP
+        var otp = '';
+        $('.otp-input').each(function (index) {
+          otp += $(this).val();
+        });
+
+        // Send the OTP, current timer value, and attempts count to the server using AJAX
+        $.ajax({
+          type: 'POST',
+          url: '/verify-otp',
+          data: { otp: otp, timer: timer, attempts: attempts },
+          success: function (response) {
+            // Display the new response without replacing existing content
+            var displayHtml = '<div class="array-container">';
+            for (var i = 0; i < otp.length; i++) {
+              displayHtml += '<div class="array-element">' + otp.charAt(i) + '</div>';
+            }
+            displayHtml += '<div class="array-element hint-element">' + response.hint + '</div>';
+            displayHtml += '</div>';
+
+            // Prepend the array-container to the response-container
+            $('#response-container').prepend(displayHtml);
+
+            // Decrement attempts after each submission
+            decrementAttempts();
+
+            // Check if the response contains a redirect URL
+            if (response.redirectUrl) {
+              // Redirect the user to the specified URL
+              window.location.href = response.redirectUrl;
+
+              // Disable the submit button
+              $('#submitBtn').prop('disabled', true);
+            }
+          },
+          error: function (xhr, status, error) {
+            // Handle AJAX error if needed
+            console.error("AJAX Error:", status, error);
+            $('#response-container').prepend('<p>Error occurred. Please try again.</p>');
+          }
+        });
+      });
+
+      // Store the initial values in localStorage
+      localStorage.setItem(userId + '_timer', timer);
+      localStorage.setItem(userId + '_attempts', attempts);
+    });
+  })(jQuery);
+</script>
+
+    
+
+
+</body>
+
+</html>

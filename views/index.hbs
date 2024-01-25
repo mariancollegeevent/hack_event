@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacking Event</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #282c34;
+            color: #61dafb;
+            text-align: center;
+        }
+
+        header {
+            padding: 20px;
+            background-color: #1d1e22;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 36px;
+            color: #61dafb;
+        }
+
+        .options-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+        }
+
+        .login-option {
+            margin: 20px;
+            padding: 20px;
+            border: 2px solid #61dafb;
+            border-radius: 8px;
+            background-color: #1d1e22;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .login-option:hover {
+            background-color: #282c34;
+        }
+
+        a {
+            text-decoration: none;
+            color: #61dafb;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Hacking Event</h1>
+    </header>
+
+    <div class="options-container">
+        <div class="login-option">
+            <h2>Admin Login</h2>
+            <p>Login as an administrator to manage the event.</p>
+            <a href="/admin">Login</a>
+        </div>
+
+        <div class="login-option">
+            <h2>Participant Login</h2>
+            <p>Login as a participant to join the hacking challenge.</p>
+            <a href="/auth-game">Login</a>
+        </div>
+    </div>
+</body>
+
+</html>

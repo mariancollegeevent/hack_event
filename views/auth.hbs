@@ -1,0 +1,102 @@
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <title>Login Form</title>
+
+    <style>
+      body { background-color: #000; color: #00ff00; font-family: 'Courier New',
+      Courier, monospace; } .login-container { margin-top: 50px; text-align:
+      center; } .card { background-color: #222; border: 1px solid #00ff00; }
+      .card-header { background-color: #111; border-bottom: 1px solid #00ff00; }
+      .form-group { margin-top: 20px; } .form-control { width: 80%; margin: 0
+      auto; background-color: #222; border: 1px solid #00ff00; color: #00ff00;
+      outline: none; } .submit-btn { margin-top: 20px; background-color:
+      #00ff00; color: #000; } .submit-btn:hover { background-color: #006400;
+      color: #fff; }
+    </style>
+  </head>
+
+  <body>
+
+    <div class="container">
+      <div class="row justify-content-center login-container">
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header text-center">
+              <h4>Enter Your Credentials to Enter to the Next Level</h4>
+            </div>
+            <div class="card-body">
+              <form action="/auth-game" method="post" id="loginForm">
+                <div class="form-group">
+                  <input
+                    name="username"
+                    type="text"
+                    class="form-control"
+                    name="username"
+                    placeholder="Enter your username"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <input
+                    name="access"
+                    type="password"
+                    class="form-control"
+                    name="accessKey"
+                    placeholder="Enter your access key"
+                    required
+                  />
+                </div>
+                <button
+                  type="button"
+                  class="btn btn-hack submit-btn"
+                  onclick="login()"
+                >Login</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+    ></script>
+
+<script>
+    function login() {
+        $.ajax({
+            type: 'POST',
+            url: '/auth-game',
+            data: $('#loginForm').serialize(),
+         success: function (data) {
+    console.log('Success callback executed');
+    if (data.success) {
+        window.location.href = data.redirect;
+    } else {
+        alert(data.message);
+    }
+},
+
+            error: function () {
+                alert('Error occurred during login');
+            }
+        });
+    }
+</script>
+    <!-- Additional script if needed -->
+  </body>
+
+</html>
