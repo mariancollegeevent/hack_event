@@ -56,7 +56,7 @@
             padding: 10px;
             background-color: #222;
             border: 1px solid #00ff00;
-            max-height: 150px; /* Fixed height */
+            max-height: 325px; /* Fixed height */
             overflow-y: auto;
         }
 
@@ -241,6 +241,25 @@
     <script>
   (function ($) {
     $(document).ready(function () {
+
+              function moveToNextField(currentField) {
+        var maxLength = parseInt(currentField.attr('maxlength'));
+        var nextField = currentField.next('.otp-input');
+
+        if (currentField.val().length === maxLength && nextField.length > 0) {
+          nextField.focus();
+        }
+      }
+
+       $('.otp-input').on('input', function () {
+        moveToNextField($(this));
+      });
+
+          function resetOtpFields() {
+        $('.otp-input').val('');
+        $('.otp-input:first').focus(); // Set focus to the first OTP field
+      }
+
       // Function to get stored value from localStorage or use default
       function getStoredValue(key, defaultValue) {
         var storedValue = localStorage.getItem(key);
@@ -347,6 +366,7 @@
               // Disable the submit button
               $('#submitBtn').prop('disabled', true);
             }
+            resetOtpFields();
           },
           error: function (xhr, status, error) {
             // Handle AJAX error if needed
