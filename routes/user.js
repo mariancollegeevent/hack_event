@@ -24,7 +24,7 @@ router.get("/game", verifyLogin,function (req, res, next) {
     const deserializedUserDocument = JSON.parse(storedUserDocument);
    // console.log(deserializedUserDocument._id);
 
-    res.render("game", {  userId : deserializedUserDocument._id });
+    res.render("game", {  userId : deserializedUserDocument._id ,username:deserializedUserDocument.participantname});
   
 });
 
@@ -180,7 +180,8 @@ router.post("/auth-game", async function (req, res, next) {
 
       const simplifiedUserObject = {
         _id: response._id,
-        randomnum: response.randomnum
+        randomnum: response.randomnum,
+        participantname:response.participantname
       };
 
       // Serialize the simplified user object to a string and save it in the cookie
