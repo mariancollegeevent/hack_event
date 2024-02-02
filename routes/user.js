@@ -55,13 +55,14 @@ router.post('/verify-otp', (req, res) => {
   try {
     const storedUserDocument = req.cookies.userDocument;
     const deserializedUserDocument = JSON.parse(storedUserDocument);
-
+    
     // Convert randomnum to a string
     const serverOTP = String(deserializedUserDocument.randomnum);
 
     console.log(req.body.timer);
     const userOTP = req.body.otp;
     let hint = '';
+    let repetition = '';
 
     if (userOTP === serverOTP) {
       // If OTPs match, render the user to the success page
@@ -83,8 +84,16 @@ router.post('/verify-otp', (req, res) => {
             // Correct position
             hint += '!';
           } else {
+            console.log('hi')
             // Correct digit but wrong position
-            hint += '.';
+            if (repetition.includes(userDigit)) {
+              // Do nothing for repeated digits
+            } else {
+              hint += '.';
+              repetition += userDigit;
+            }
+
+            
           }
         } else {
           // Digit is not present in serverOTP
