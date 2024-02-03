@@ -44,6 +44,13 @@ router.get("/delete-user", (req, res) => {
   router.get("/view-user", (req, res) => {
     const userId = req.query.id;
   userhelp.displayuser(userId).then((response)=>{
+    if(response.completed){
+      console.log(response)
+      response.attempts=35-response.attempts
+      response.timer=500-response.timer
+
+    }
+    console.log*(response)
     res.render("view-user",{response})
   })
     //res.redirect('/admin/dashboard');
