@@ -57,7 +57,7 @@ router.post('/verify-otp', (req, res) => {
     const deserializedUserDocument = JSON.parse(storedUserDocument);
     
     // Convert randomnum to a string
-    const serverOTP = String(deserializedUserDocument.randomnum);
+    var serverOTP = String(deserializedUserDocument.randomnum);
 
     console.log(req.body.timer);
     const userOTP = req.body.otp;
@@ -75,6 +75,7 @@ router.post('/verify-otp', (req, res) => {
       });
     } else {
       // Initialize the hint string
+      let serverotparray =[];
       for (let i = 0; i < userOTP.length; i++) {
         const userDigit = userOTP[i];
 
@@ -83,8 +84,15 @@ router.post('/verify-otp', (req, res) => {
           if (serverOTP[i] === userDigit) {
             // Correct position
             hint += '!';
+            serverotparray=serverOTP.split('')
+            serverotparray[i]='x'
+            serverOTP = serverotparray.join('');
+            //serverOTP[i]='x'
+
           } else {
-            console.log('hi')
+            console.log(serverOTP)
+            if (serverOTP.includes(userDigit)){
+              console.log('hi')
             // Correct digit but wrong position
             if (repetition.includes(userDigit)) {
               // Do nothing for repeated digits
@@ -92,6 +100,9 @@ router.post('/verify-otp', (req, res) => {
               hint += '.';
               repetition += userDigit;
             }
+
+            }
+            
 
             
           }
