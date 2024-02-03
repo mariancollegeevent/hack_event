@@ -71,7 +71,7 @@ router.post('/verify-otp', (req, res) => {
       res.status(200).json({
         success: true,
         hint: hint,
-        redirectUrl: `/success-page?time=${req.body.timer}&attempts=${req.body.attempts}`
+        redirectUrl: `/success-page?time=${500-req.body.timer}&attempts=${35-req.body.attempts}`
       });
     } else {
       // Initialize the hint string
